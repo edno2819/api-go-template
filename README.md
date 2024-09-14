@@ -1,0 +1,1 @@
+refer: https://github.com/eddycjy/go-gin-example/blob/master/models/article.go
