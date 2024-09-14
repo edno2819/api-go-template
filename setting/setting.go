@@ -61,4 +61,7 @@ func Setup() {
 	}
 
 	DatabaseSetting.Url = os.Getenv("MONGO_URL")
+	DatabaseSetting.Database = os.Getenv("MONGO_DB")
+	AppSetting.JwtSecret = os.Getenv("JWT_KEY")
+
 }

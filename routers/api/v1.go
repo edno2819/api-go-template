@@ -3,8 +3,8 @@ package v1
 import (
 	"context"
 	"fmt"
+	utils_middleware "gin-mongo-api/utils"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -28,9 +28,11 @@ func CreatePerson(c *gin.Context) {
 		return
 	}
 
-	collection := client.Database(os.Getenv("MONGO_DB")).Collection("people")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
+
+	db := utils_middleware.GetDBFromContext(c)
+	collection := db.Collection("people")
 
 	_, err := collection.InsertOne(ctx, person)
 	if err != nil {
@@ -44,7 +46,8 @@ func CreatePerson(c *gin.Context) {
 }
 
 func GetPeople(c *gin.Context) {
-	collection := client.Database("testdb").Collection("people")
+	db := utils_middleware.GetDBFromContext(c)
+	collection := db.Collection("people")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

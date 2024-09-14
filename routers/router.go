@@ -1,9 +1,9 @@
 package routers
 
 import (
+	"gin-mongo-api/database"
 	"gin-mongo-api/middleware"
 	v1 "gin-mongo-api/routers/api"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,14 +13,20 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	r.StaticFS("/export", http.Dir(export.GetExcelFullPath()))
-	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
+	//r.StaticFS("/export", http.Dir(export.GetExcelFullPath()))
+	//r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
 
-	// apiv1.Use(jwt.JWT())
+	db := database.ConnectDb()
+	r.Use(middleware.DBMiddleware(db))
+	r.Use(middleware.ValidateHeaders())
+
 	apiv1 := r.Group("api/v1")
-	apiv1.Use(middleware.ValidateSecure)
+	apiv1.POST("/login", Login)
+	apiv1.Use(middleware.JWTAuthMiddleware())
 	{
-		apiv1.Use(v1.CreatePerson)
+		apiv1.POST("/person", v1.CreatePerson)
+		apiv1.GET("/people", v1.GetPeople)
+		apiv1.GET("/product", v1.GetProducts)
 	}
 
 	return r
