@@ -42,8 +42,7 @@ type Database struct {
 }
 
 type Redis struct {
-	Host        string
-	Password    string
+	Url         string
 	MaxIdle     int
 	MaxActive   int
 	IdleTimeout time.Duration
@@ -63,5 +62,5 @@ func Setup() {
 	DatabaseSetting.Url = os.Getenv("MONGO_URL")
 	DatabaseSetting.Database = os.Getenv("MONGO_DB")
 	AppSetting.JwtSecret = os.Getenv("JWT_KEY")
-
+	RedisSetting.Url = os.Getenv("REDIS_URL")
 }

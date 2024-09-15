@@ -1,4 +1,4 @@
-package routers
+package v1
 
 import (
 	"context"
@@ -24,7 +24,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	db := utils_middleware.GetDBFromContext(c)
+	db := utils_middleware.GetDBFromGinSet(c)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

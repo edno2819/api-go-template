@@ -4,10 +4,12 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 const DbContextKey string = "db"
+const CacheContextKey string = "cache"
 
 func ValidateHeaders() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -24,6 +26,13 @@ func ValidateHeaders() gin.HandlerFunc {
 func DBMiddleware(db *mongo.Database) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set(DbContextKey, db)
+		c.Next()
+	}
+}
+
+func CacheMiddleware(cache *redis.Client) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Set(CacheContextKey, cache)
 		c.Next()
 	}
 }
