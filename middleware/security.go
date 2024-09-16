@@ -1,7 +1,9 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
+	"runtime"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
@@ -28,6 +30,26 @@ func DBMiddleware(db *mongo.Database) gin.HandlerFunc {
 		c.Set(DbContextKey, db)
 		c.Next()
 	}
+}
+
+func CustomRecovery(c *gin.Context, recovered interface{}) {
+	err, ok := recovered.(string)
+	if !ok {
+		err = "Erro desconhecido"
+	}
+
+	// Captura a stack trace
+	stack := make([]byte, 1024*8)
+	stack = stack[:runtime.Stack(stack, false)]
+
+	log.Printf("Panic recuperado: %s\n%s", err, stack)
+
+	c.JSON(http.StatusInternalServerError, gin.H{
+		"status":  http.StatusInternalServerError,
+		"message": "Erro interno do servidor",
+	})
+
+	c.AbortWithStatus(http.StatusInternalServerError)
 }
 
 func CacheMiddleware(cache *redis.Client) gin.HandlerFunc {

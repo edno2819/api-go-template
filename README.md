@@ -5,11 +5,11 @@ passar a instância do banco pelo midware - OK
 Utilizar JWT token - OK
 Fazer o test de estress com o k6 - OK
 criar cache - OK
-Swagger
-Criar middleware de erro
+Swagger - OK
+Criar middleware de erro - OK
 fazer algum endpoint com processamento pesado
-criar endpoint com graphQL
 Adicionar o Grafana para observar o resultados do K6
+Limitar execução dos container similando uma instância real na nuvem
 
 ### Swagger:
 -  http://localhost:8080/swagger/index.html

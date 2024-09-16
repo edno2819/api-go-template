@@ -13,17 +13,15 @@ import (
 func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
-
-	//r.StaticFS("/export", http.Dir(export.GetExcelFullPath()))
-	//r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
+	r.Use(gin.CustomRecovery(middleware.CustomRecovery))
 
 	db := database.ConnectDb()
 	cache := database.ConnectRedis()
 
 	r.Use(middleware.DBMiddleware(db))
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.StaticFile("/swagger.yaml", "./docs/swagger.yaml")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/swagger.yaml")))
 
 	r.Use(middleware.ValidateHeaders())
 	apiv1 := r.Group("api/v1")
@@ -32,7 +30,7 @@ func InitRouter() *gin.Engine {
 	{
 		apiv1.POST("/person", v1.CreatePerson)
 		apiv1.GET("/people", middleware.CacheMiddleware(cache), v1.GetPeople)
-		apiv1.GET("/product", v1.GetProducts)
+		apiv1.GET("/panic", middleware.CacheMiddleware(cache), v1.SimulePanic)
 	}
 
 	return r

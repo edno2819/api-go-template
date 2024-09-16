@@ -128,13 +128,20 @@ func CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
-// GetProducts godoc
-// @Summary      Retorna todos os produtos
+// SimulePanic godoc
+// @Summary      Simula um panico da API
 // @Description  Obtém uma lista de todos os produtos (exemplo, a função está vazia)
-// @Tags         products
+// @Tags         panic
 // @Produce      json
 // @Success      200  {object}  Person
-// @Router       /api/v1/products [get]
-func GetProducts(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{})
+// @Router       /api/v1/panic [get]
+func SimulePanic(c *gin.Context) {
+	cache := utils_middleware.GetCacheFromContext(c)
+
+	result := service.GetDataCache(cache, "people-all")
+	if result != "" {
+		c.JSON(http.StatusOK, result)
+		return
+	}
+	panic("Erro forçado: teste do CustomRecovery")
 }
