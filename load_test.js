@@ -33,7 +33,7 @@ export default function () {
         const params = {
             headers: {
                 "X-API-KEY": "65464",
-                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVkbm8iLCJleHAiOjE3MjY0Mzg2NTUsImlhdCI6MTcyNjM1MjI1NX0.iLkOQQyUaI0GcjmaGSl3QY7GF6YEr2jFVw5Z2zTZS84"
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVkbm8iLCJleHAiOjE3MjY2MjIxODksImlhdCI6MTcyNjUzNTc4OX0._ctps3I2ITGgFG8LbG19t65qMiua2-qqvD97tvk60LM"
             }
         }
         const res = http.get('http://localhost:8080/api/v1/people', params);
